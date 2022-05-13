@@ -5,7 +5,7 @@
     <meta name="author" content="Gary Zhang"/>
     <meta property="og:title" content="Google Form background generator - UNC SPS" />
     <meta property="og:type" content="website" />
-    <meta property="og:description" content="An HTML app that generates a Google Form background image containing arbitrary text. Your computer must be connected to the Internet for this to work." />
+    <meta property="og:description" content="An HTML app that generates a background image containing arbitrary text, for use in UNC SPS Google Forms. Your computer must be connected to the Internet for this to work." />
     <title>Google Form background generator - UNC SPS</title>
     <style>
         body{
@@ -18,7 +18,7 @@
             font-size: inherit;
             font-family: inherit;
             width: 20em;
-            padding: 0.3em;
+            padding: 0.4em;
         }
         
         button{
@@ -46,11 +46,11 @@
             z-index:-1;
             transition: 0.5s ease;
         }
-
+        
         button:hover{
             color: white;
         }
-
+        
         button:hover::before {
             width: calc(100% - 0.2em);
         }
@@ -72,7 +72,7 @@
         var canvas = document.getElementById('canv');
         var ctx    = canvas.getContext('2d');
         var svg    = new Image();
-        svg.crossOrigin = "anonymous"; // necessary to access an online public Image without CORS violation
+        //svg.crossOrigin = "anonymous"; // necessary to access an online public Image without CORS violation
         svg.onload = function(){
             ctx.drawImage(svg, 0, 0);
         }
@@ -80,13 +80,13 @@
         // it's crucial to use a public URL, because the importing of an Image from a local file throws a CORS violation
         // it's kind of stupid that local HTML pages can't access local files but using this Github URL is the easiest workaround
         svg.src = 'https://raw.githubusercontent.com/qedgary/UNCSPS-form-background/main/SPS%20Google%20Form%20background%20template.svg';
-        //svg.src = 'SPS Google Form background template.svg'; // if you'd like to edit this file locally, uncomment this, and also comment out the svg.crossOrigin line
+        svg.src = 'SPS Google Form background template.svg'; // if you'd like to edit this file locally, uncomment this, and also comment out the svg.crossOrigin line
         
         var fontList = "'Segoe UI', 'Proxima Nova', 'Avenir', 'Open Sans', 'Oxygen', 'Roboto', 'Ubuntu', 'Helvetica Neue', sans-serif";
         var inputText = "";
         
-        const rQuote    = ["Sesame Street is not an anime -Ravi"]; // ;)
-        const seanArray = ["we're all friends here", "mumble mumble mumble", "whole chorus of answers", "did you pay your tuition?", "don't go to grad school"];
+        const rQuote  = ["Sesame Street is not an anime -Ravi"]; // ;)
+        const seanArr = ["we're all friends here", "mumble mumble mumble", "whole chorus of answers", "did you pay your tuition?", "don't go to grad school"];
         
         document.addEventListener("input", updateText); // update text every time new text is entered into <input/> element
         function updateText(event){
@@ -97,27 +97,31 @@
             ctx.drawImage(svg, 0, 0); // draw SVG again
             
             ctx.textAlign = "center";
-            ctx.font = "bold 72pt " + fontList;
-            ctx.fillStyle = "#56a0d3";
+            ctx.font = "bold 92pt " + fontList;
+            ctx.fillStyle = "#56a0f3";
+            
             if(inputText.length > 7){
-                if(strMatch(inputText, rQuote)){
+                if(stMtch(inputText, rQuote)){
                     ctx.font = "bold 60pt " + fontList;
                     inputText = rQuote;
                 }
-                else if (strMatch(inputText, seanArray)){
-                    ctx.font = "48pt " + fontList;
+                else if (stMtch(inputText, seanArr)){
+                    ctx.font = "italic 48pt " + fontList;
                     inputText = "404 Sean quote not found did u forgor hes retirn?";
                 }
-                else if(inputText.length > 32){
-                    ctx.font = "bold 60pt " + fontList;
+                else if(ctx.measureText(inputText).width > 1370){ // resize font if text goes too long
+                    ctx.font = "bold 72pt " + fontList;
+                    if(ctx.measureText(inputText).width > 1370){
+                        ctx.font = "bold 60pt" + fontList;
+                    }
                 }
             }
             
-            ctx.fillText(inputText, 800, 189);
+            ctx.fillText(inputText, 800, 215);
         }
         
         function generatePNG(){ // generate a PNG image which is downloaded when this function is called
-            var imgDownloadable = canv.toDataURL("image/png");
+            let imgDownloadable = canv.toDataURL("image/png");
             
             let link      = document.createElement("a");
             link.download = inputText + " - SPS Google Form.png";
@@ -125,7 +129,7 @@
             link.click();
         }
         
-        function strMatch(inp, arr){ //easter egg function
+        function stMtch(inp, arr){ //easter egg function
             let m = false;
             for(let q = 0; q < arr.length; q++){
                 m = m || (inp.length < arr[q].length && inp.toLowerCase() == arr[q].substr(0, inp.length).toLowerCase());
