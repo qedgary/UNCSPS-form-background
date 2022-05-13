@@ -5,7 +5,7 @@
     <meta name="author" content="Gary Zhang"/>
     <meta property="og:title" content="Google Form background generator - UNC SPS" />
     <meta property="og:type" content="website" />
-    <meta property="og:description" content="An HTML app that generates a background image containing arbitrary text, for use in UNC SPS Google Forms. Your computer must be connected to the Internet for this to work." />
+    <meta property="og:description" content="An HTML app that generates a background image containing arbitrary text, for use in UNC SPS Google Forms. Your computer must be connected to the Internet for this to work. Works best with the fonts on a Windows computer." />
     <title>Google Form background generator - UNC SPS</title>
     <style>
         body{
@@ -72,7 +72,7 @@
         var canvas = document.getElementById('canv');
         var ctx    = canvas.getContext('2d');
         var svg    = new Image();
-        //svg.crossOrigin = "anonymous"; // necessary to access an online public Image without CORS violation
+        svg.crossOrigin = "anonymous"; // necessary to access an online public Image without CORS violation
         svg.onload = function(){
             ctx.drawImage(svg, 0, 0);
         }
@@ -80,7 +80,7 @@
         // it's crucial to use a public URL, because the importing of an Image from a local file throws a CORS violation
         // it's kind of stupid that local HTML pages can't access local files but using this Github URL is the easiest workaround
         svg.src = 'https://raw.githubusercontent.com/qedgary/UNCSPS-form-background/main/SPS%20Google%20Form%20background%20template.svg';
-        svg.src = 'SPS Google Form background template.svg'; // if you'd like to edit this file locally, uncomment this, and also comment out the svg.crossOrigin line
+        //svg.src = 'SPS Google Form background template.svg'; // if you'd like to edit this file locally, uncomment this, and also comment out the svg.crossOrigin line
         
         var fontList = "'Segoe UI', 'Proxima Nova', 'Avenir', 'Open Sans', 'Oxygen', 'Roboto', 'Ubuntu', 'Helvetica Neue', sans-serif";
         var inputText = "";
